@@ -1,0 +1,22 @@
+version: "3.9"
+
+networks:
+    redis:
+        internal: true
+
+services:
+    web:
+        image: luk4s.dev
+        networks: [redis,default]
+        environment:
+            - REDIS_ADDR=redis:6379
+        ports:
+            - "3000:3000"
+    redis:
+        image: redis:6-alpine
+        container_name: redis
+        volumes:
+            - ./redis.conf:/usr/local/etc/redis/redis.conf
+            - ./redis-data:/data
+        networks: [redis]
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]

@@ -1,3 +1,4 @@
 node_modules/
 public/build/
 luk4s.dev
+redis-data/
