@@ -17,9 +17,7 @@ func main() {
 	})
 
 	app.Get("/", func(ctx *fiber.Ctx) error {
-		return ctx.Render("index", fiber.Map{
-			"test": "Testin",
-		})
+		return ctx.Render("index", fiber.Map{})
 	})
 
 	app.Static("/public", "./public", fiber.Static{
