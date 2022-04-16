@@ -6,6 +6,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
 	"github.com/lukasbischof/luk4s.dev/app/forum"
 	"github.com/qinains/fastergoding"
@@ -93,13 +94,14 @@ func boot() (*fiber.App, *redis.Client) {
 		AppName:                 "luk4s.dev",
 		ViewsLayout:             "layouts/application",
 		ServerHeader:            "wordprezz",
-		ETag:                    true,
 		EnableTrustedProxyCheck: true,
 	})
 
 	app.Use(compress.New(compress.Config{
 		Level: compress.LevelBestSpeed,
 	}))
+
+	app.Use(etag.New())
 
 	redisDb, err := strconv.ParseInt(getEnv("REDIS_DB", "0"), 10, 32)
 	if err != nil {
