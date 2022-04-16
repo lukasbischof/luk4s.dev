@@ -1,0 +1,117 @@
+.banner
+    marquee(behavior='scroll')
+        | New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!!
+        | New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!!
+        | New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!!
+        | New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!! New!!
+.banner.bg-blue
+    marquee(behavior='scroll')
+        | Checkout my links! &middot; Checkout my links! &middot; Checkout my links! &middot;
+        | Checkout my links! &middot; Checkout my links! &middot; Checkout my links! &middot;
+        | Checkout my links! &middot; Checkout my links! &middot; Checkout my links! &middot;
+        | Checkout my links! &middot; Checkout my links! &middot; Checkout my links! &middot;
+        | Checkout my links! &middot; Checkout my links! &middot; Checkout my links! &middot;
+.container.bg-container
+    .wrapper
+        article#content
+            img(src='public/static/welcome.png' alt='Welcome' width='640' height='447' style='width: 320px; height: 224px')
+            h1
+                font(color='blue')
+                    strong Welcome
+                |  to my website!
+            h2
+                | I am
+                u Lukas Bischof
+                | , a professional web designer
+            p
+                | When I&apos;m not busy making new websites, I&apos;m designing other stuff.
+                | Since design is my passion, it always looks good.
+                | And since it always looks good, this probably justifies me as a professional web developer.
+                br
+                img(src='public/static/alien.png' alt='Alien')
+            hr
+            h2 FAQ
+            h3 Is it really true that you are a professional web developer?
+            p Yes.
+            h3 But how is that possible?
+            p I have completed training as a professional web designer
+            h3 Ah no, I mean because this website looks shitty
+            p
+                | I beg you pardon?
+                img(src='public/static/angry_alien.png' alt='Angry alien' width='60' height='70' style='width: 30px; height: 35px')
+            h3 Just face it
+            p
+                | Maybe it doesn&apos;t look the best but at least it loads faster than your jQuery bloated page.
+                | Aaaaand it&apos;s for sure easy to maintain. Aaaaand maybe I was just too lazy to actually do something
+                | pretty.
+            h3 Do all your websites look like this?
+            p Not all, there are actual some real ones
+            h3 Like?
+            p
+                | For example
+                a(href='https://www.myzivi.ch' target='_blank' rel='noopener noreferrer nofollow') MyZivi
+                |           and a lot of other projects I did @Renuo
+            h3 You&apos;re only doing websites or do you have other skills as well?
+            p
+                | Some, yes. Mainly involving backend stuff, iOS programming, photographing
+                | and pretending to be busy.
+            hr
+            h2 Forum
+            em Out of order, sorry &#x1F6A7;
+            br
+            br
+        aside#aside
+            .block
+                h3 Links
+                ul
+                    li
+                        a(href='https://github.com/lukasbischof' rel='noreferrer noopener nofollow' target='_blank')
+                            | My Github Profile
+                    li
+                        a(href='https://stackoverflow.com/users/3084387/aseider?tab=profile' rel='noreferrer noopener nofollow' target='_blank')
+                            | My Stackoverflow Profile
+                    li
+                        a(href='https://www.linkedin.com/in/lukas-bischof/' rel='noreferrer noopener nofollow' target='_blank')
+                            | My LinkedIn Profile
+            .block
+                h3 Weather Report
+                center
+                    img(src='https://wttr.in/zurich.png?0' alt='Weather')
+            .block
+                h3 Your User Agent
+                p#user-agent
+                script.
+                    document.getElementById('user-agent').innerText = window.navigator.userAgent;
+            .block
+                h3 Current Time
+                p#clock
+                script.
+                    const time = new Date();
+                    document.getElementById('clock').innerText = `D chile seit ${time.getHours()}:${time.getMinutes()}`;
+            .block
+                h3 Pumpkin
+                img(
+                    src='public/static/lantern.png'
+                    alt='Lantern'
+                    width='180'
+                    height='155'
+                    onclick="alert('You clicked on the pumpkin!')"
+                    style='width: 100%; height: auto; padding: 2em; cursor: pointer'
+                )
+footer#footer
+    .container.footer-content
+        div
+            h1 &copy; by Lukas Bischof 2022
+            p All rights very much reserved. No copy please &#x1F97A;
+script.
+    VANTA.WAVES({
+        el: '#footer',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 400.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x333333
+    });
