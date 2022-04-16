@@ -23,17 +23,7 @@ func main() {
 		fmt.Println("Starting with Fastergoding")
 	}
 
-	redisDb, err := strconv.ParseInt(getEnv("REDIS_DB", "0"), 10, 32)
-	if err != nil {
-		log.Fatal(err)
-	}
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     getEnv("REDIS_ADDR", "localhost:6379"),
-		Password: getEnv("REDIS_PASSWORD", ""),
-		DB:       int(redisDb),
-	})
-
-	app := boot()
+	app, rdb := boot()
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return renderIndex(c, rdb)
@@ -61,13 +51,12 @@ func renderIndex(c *fiber.Ctx, rdb *redis.Client) error {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 	}
 
-	p := message.NewPrinter(language.English)
 	return c.Render("index", fiber.Map{
-		"visitorCount": p.Sprintf("%d", visitorCount),
+		"visitorCount": message.NewPrinter(language.English).Sprintf("%d", visitorCount),
 	})
 }
 
-func boot() *fiber.App {
+func boot() (*fiber.App, *redis.Client) {
 	engine := pug.New("./views", ".pug")
 	app := fiber.New(fiber.Config{
 		Views:        engine,
@@ -81,7 +70,17 @@ func boot() *fiber.App {
 		Level: compress.LevelBestSpeed,
 	}))
 
-	return app
+	redisDb, err := strconv.ParseInt(getEnv("REDIS_DB", "0"), 10, 32)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     getEnv("REDIS_ADDR", "localhost:6379"),
+		Password: getEnv("REDIS_PASSWORD", ""),
+		DB:       int(redisDb),
+	})
+
+	return app, rdb
 }
 
 func getEnv(key, fallback string) string {

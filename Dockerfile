@@ -4,7 +4,7 @@ FROM golang:latest AS build
 
 WORKDIR "/go/src/github.com/lukasbischof/luk4s.dev/"
 
-COPY ["go.mod", "go.sum", "main.go", "./"]
+COPY ["go.mod", "go.sum", "*.go", "./"]
 RUN go mod download && go mod verify
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -v -o /go/bin/luk4s.dev .
 
