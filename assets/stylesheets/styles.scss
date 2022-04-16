@@ -1,75 +1,75 @@
 @import "reboot";
 
 body {
-  cursor: url("../images/cursor.svg"), default;
-  background-image: url("../images/bg.jpeg");
-  background-repeat: repeat;
-  background-size: 600px 600px;
+    cursor: url("../images/cursor.svg"), default;
+    background-image: url("../images/bg.jpeg");
+    background-repeat: repeat;
+    background-size: 600px 600px;
 }
 
 footer {
-  color: $white;
-  min-height: 400px;
+    color: $white;
+    background-color: rgba($black, .8);
 
-  .footer-content {
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
+    .footer-content {
+        padding: .5rem 0;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
 }
 
 .banner {
-  background-color: $orangered;
-  color: $white;
-  padding: .5em 0;
-  font-weight: bold;
+    background-color: $orangered;
+    color: $white;
+    padding: .5em 0;
+    font-weight: bold;
 
-  marquee {
-    padding: 0;
-    margin: 0;
-  }
+    marquee {
+        padding: 0;
+        margin: 0;
+    }
 
-  &.bg-blue {
-    background-color: aqua;
-    color: $black;
-  }
+    &.bg-blue {
+        background-color: aqua;
+        color: $black;
+    }
 }
 
 .bg-container {
-  background-color: rgba($white, .9);
-  margin-top: .5em;
-  margin-bottom: .5em;
+    background-color: rgba($white, .9);
+    margin-top: .5em;
+    margin-bottom: .5em;
 }
 
 .wrapper {
-  display: flex;
-  width: 100%;
-  padding-top: 1.5em;
+    display: flex;
+    width: 100%;
+    padding-top: 1.5em;
 
-  #content {
-    flex-grow: 1;
-  }
-
-  #aside {
-    max-width: 400px;
-    min-width: 230px;
-    flex-grow: 0;
-
-    .block {
-      background-color: lightblue;
-      padding: .5em .25em;
-      width: 100%;
-      margin-bottom: .5em;
-
-      img {
-        max-width: 100%;
-      }
-
-      ul {
-        margin: 0;
-        padding-inline-start: 20px;
-      }
+    #content {
+        flex-grow: 1;
     }
-  }
+
+    #aside {
+        max-width: 400px;
+        min-width: 230px;
+        flex-grow: 0;
+
+        .block {
+            background-color: lightblue;
+            padding: .5em .25em;
+            width: 100%;
+            margin-bottom: .5em;
+
+            img {
+                max-width: 100%;
+            }
+
+            ul {
+                margin: 0;
+                padding-inline-start: 20px;
+            }
+        }
+    }
 }

@@ -56,10 +56,23 @@
                 | Some, yes. Mainly involving backend stuff, iOS programming, photographing
                 | and pretending to be busy.
             hr
-            h2 Forum
-            em Out of order, sorry &#x1F6A7;
-            br
-            br
+            center
+                | *******************************
+            hr
+            h2 Guestbook
+            | {{range .forumEntries}}
+                i Authored by #[b #{.Author}] on #{.Created}
+                p #{.Content}
+                br
+                hr
+            | {{end}}
+            h4 New Guestbook Entry
+            form(action="/forum" method="post")
+                .author
+                    input(type="text", name="author", placeholder="Author" autocomplete="autocomplete")
+                .content
+                    textarea(name="content", placeholder="Content" autocomplete="of")
+                input(type="submit", value="Send")
         aside#aside
             .block
                 h3 Links
@@ -92,6 +105,9 @@
                     const time = new Date();
                     document.getElementById('clock').innerText = `D chile seit ${time.getHours()}:${time.getMinutes()}`;
             .block
+                h3 Your IP
+                p Your IP is #{.ip}
+            .block
                 h3 Pumpkin
                 img(
                     src='public/static/lantern.png'
@@ -106,15 +122,5 @@ footer#footer
         div
             h1 &copy; by Lukas Bischof 2022
             p All rights very much reserved. No copy please &#x1F97A;
-script.
-    VANTA.WAVES({
-        el: '#footer',
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 400.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x333333
-    });
+            p
+                | This website is powered by #[s Wordpress] luckily not
