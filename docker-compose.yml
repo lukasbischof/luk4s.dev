@@ -15,9 +15,19 @@ services:
             - "3000:3000"
     redis:
         image: redis:6-alpine
+        hostname: redis
         container_name: redis
         volumes:
             - ./redis.conf:/usr/local/etc/redis/redis.conf
             - ./redis-data:/data
         networks: [redis]
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        container_name: redis-commander
+        hostname: redis-commander
+        networks: [redis, default]
+        environment:
+            - REDIS_HOSTS=local:redis:6379
+        ports:
+            - "8081:8081"
