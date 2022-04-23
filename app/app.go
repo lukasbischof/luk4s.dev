@@ -8,10 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
-	"github.com/lukasbischof/luk4s.dev/app/forum"
 	"github.com/qinains/fastergoding"
-	"golang.org/x/text/language"
-	"golang.org/x/text/message"
 	"log"
 	"os"
 	"strconv"
@@ -27,18 +24,8 @@ func Run() {
 
 	app, rdb := boot()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return renderIndex(c, rdb)
-	})
-
-	app.Post("/forum", func(c *fiber.Ctx) error {
-		return renderForum(c, rdb)
-	})
-
-	app.Static("/public", "./public", fiber.Static{
-		Compress: true,
-		Browse:   true,
-	})
+	MountRoot(app, rdb)
+	MountAdmin(app, rdb)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.
@@ -47,44 +34,6 @@ func Run() {
 	})
 
 	log.Fatal(app.Listen(":3000"))
-}
-
-func renderIndex(c *fiber.Ctx, rdb *redis.Client) error {
-	c.Accepts("html", "text/html")
-
-	visitorCount, err := IncreaseVisitorCount(rdb, ctx)
-	if err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, err)
-	}
-
-	forumEntries, err := GetForumEntries(rdb, ctx)
-
-	return c.Render("index", fiber.Map{
-		"forumEntries": forumEntries,
-		"ip":           c.IP(),
-		"visitorCount": message.NewPrinter(language.English).Sprintf("%d", visitorCount),
-	})
-}
-
-func renderForum(c *fiber.Ctx, rdb *redis.Client) error {
-	c.Accepts("html", "text/html")
-
-	entry := new(forum.Entry)
-	if err := c.BodyParser(entry); err != nil {
-		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
-	}
-
-	entry.Process()
-	if err := entry.Validate(); err != nil {
-		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
-	}
-
-	err := SaveForumEntry(rdb, ctx, entry)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
-	}
-
-	return c.Redirect("/")
 }
 
 func boot() (*fiber.App, *redis.Client) {
@@ -102,11 +51,20 @@ func boot() (*fiber.App, *redis.Client) {
 	}))
 
 	app.Use(etag.New())
+	app.Use(func(c *fiber.Ctx) error {
+		c.Accepts("html", "text/html")
+		return c.Next()
+	})
+	app.Static("/public", "./public", fiber.Static{
+		Compress: true,
+		Browse:   os.Getenv("APP_ENV") == "development",
+	})
 
 	redisDb, err := strconv.ParseInt(getEnv("REDIS_DB", "0"), 10, 32)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     getEnv("REDIS_ADDR", "localhost:6379"),
 		Password: getEnv("REDIS_PASSWORD", ""),

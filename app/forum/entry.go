@@ -5,17 +5,18 @@ import (
 	"github.com/gofiber/fiber/v2/utils"
 	"github.com/microcosm-cc/bluemonday"
 	"gopkg.in/validator.v2"
+	"strings"
 	"sync"
 	"time"
 )
 
-var once sync.Once
 var (
+	once   sync.Once
 	policy *bluemonday.Policy
 )
 
 type Entry struct {
-	Id      string    `json:"id" validate:"nonzero"`
+	Id      string
 	Content string    `json:"content" validate:"nonzero"`
 	Author  string    `json:"author" validate:"nonzero"`
 	Created time.Time `json:"created"`
@@ -37,8 +38,14 @@ func (entry *Entry) Process() *Entry {
 		policy.AllowElements("i")
 	})
 
-	entry.Content = policy.Sanitize(entry.Content)
-	entry.Author = policy.Sanitize(entry.Author)
+	entry.Content = policy.Sanitize(
+		strings.TrimSpace(entry.Content),
+	)
+
+	entry.Author = policy.Sanitize(
+		strings.TrimSpace(entry.Author),
+	)
+
 	entry.Id = utils.UUID()
 	entry.Created = time.Now()
 

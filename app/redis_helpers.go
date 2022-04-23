@@ -32,32 +32,45 @@ func SaveForumEntry(rdb *redis.Client, ctx context.Context, forumEntry *forum.En
 		return err
 	}
 
-	if err := rdb.SAdd(ctx, "forum", json).Err(); err != nil {
+	if err := rdb.HSetNX(ctx, "forum", forumEntry.Id, json).Err(); err != nil {
 		return err
 	}
 
-	fmt.Printf("SADD %s\n", json)
+	fmt.Printf("HSETNX forum %s %s\n", forumEntry.Id, json)
 
 	return nil
 }
 
 func GetForumEntries(rdb *redis.Client, ctx context.Context) ([]*forum.Entry, error) {
-	result, err := rdb.SMembers(ctx, "forum").Result()
+	result, err := rdb.HGetAll(ctx, "forum").Result()
 	if err != nil {
 		return []*forum.Entry{}, err
 	}
 
 	entries := make([]*forum.Entry, len(result))
-	for i, json := range result {
+	i := 0
+	for id, json := range result {
 		entry, err := forum.FromJson([]byte(json))
 		if err != nil {
 			return []*forum.Entry{}, err
 		}
 
+		entry.Id = id
 		entries[i] = entry
+		i++
 	}
 
 	return entries, nil
+}
+
+func DeleteForumEntry(rdb *redis.Client, ctx context.Context, id string) error {
+	if err := rdb.HDel(ctx, "forum", id).Err(); err != nil {
+		return err
+	}
+
+	fmt.Printf("HDEL forum %s\n", id)
+
+	return nil
 }
 
 func RedisGet(rdb *redis.Client, ctx context.Context, key string, defaultValue string) (string, error) {

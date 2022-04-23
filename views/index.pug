@@ -89,7 +89,7 @@
             .block
                 h3 Weather Report
                 center
-                    img(src='https://wttr.in/zurich.png?0' alt='Weather')
+                    img(src='https://wttr.in/zurich.png?0' alt='Weather' lazy='lazy')
             .block
                 h3 Your User Agent
                 p#user-agent
@@ -104,9 +104,6 @@
                 script.
                     const time = new Date();
                     document.getElementById('clock').innerText = `D chile seit ${time.getHours()}:${time.getMinutes()}`;
-            .block
-                h3 Your IP
-                p Your IP is #{.ip}
             .block
                 h3 Pumpkin
                 img(

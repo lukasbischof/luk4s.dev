@@ -10,6 +10,7 @@ services:
         networks: [redis,default]
         environment:
             - REDIS_ADDR=redis:6379
+            - ADMIN_PASSWORD=admin
         ports:
             - "3000:3000"
     redis:

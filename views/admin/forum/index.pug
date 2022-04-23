@@ -1,0 +1,10 @@
+.container.bg-container
+    h1 Guestbook Admin
+    | {{range .forumEntries}}
+        i Authored by #[b #{.Author}] on #{.Created}
+        p #{.Content}
+        br
+        form(action="/admin/forum/{{.Id}}/delete" method="post")
+            input(type="submit" value="🗑 Delete" class="btn btn-danger")
+        hr
+    | {{end}}
