@@ -9,7 +9,7 @@ import (
 )
 
 const VisitorCountKey = "visitor-count"
-const ForumKey = "forum"
+const ForumKey = "forum-entries"
 
 func IncreaseVisitorCount(rdb *redis.Client, ctx context.Context) (int, error) {
 	valStr, err := RedisGet(rdb, ctx, VisitorCountKey, "0")
