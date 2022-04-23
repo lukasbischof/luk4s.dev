@@ -1,4 +1,4 @@
-@import "rfs";
+@import "vendor/rfs";
 @import "variables";
 @import "container";
 
@@ -76,7 +76,6 @@ h6 {
 
 body {
   margin: 0;
-  //font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba($black, 0);
 }
