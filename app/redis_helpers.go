@@ -8,8 +8,11 @@ import (
 	"strconv"
 )
 
+const VisitorCountKey = "visitor-count"
+const ForumKey = "forum"
+
 func IncreaseVisitorCount(rdb *redis.Client, ctx context.Context) (int, error) {
-	valStr, err := RedisGet(rdb, ctx, "visitor-count", "0")
+	valStr, err := RedisGet(rdb, ctx, VisitorCountKey, "0")
 	if err != nil {
 		return 0, err
 	}
@@ -19,7 +22,7 @@ func IncreaseVisitorCount(rdb *redis.Client, ctx context.Context) (int, error) {
 		return 0, err
 	}
 
-	if err := RedisSet(rdb, ctx, "visitor-count", strconv.Itoa(int(val+1))); err != nil {
+	if err := RedisSet(rdb, ctx, VisitorCountKey, strconv.Itoa(int(val+1))); err != nil {
 		return int(val), err
 	}
 
@@ -32,7 +35,7 @@ func SaveForumEntry(rdb *redis.Client, ctx context.Context, forumEntry *forum.En
 		return err
 	}
 
-	if err := rdb.HSetNX(ctx, "forum", forumEntry.Id, json).Err(); err != nil {
+	if err := rdb.HSetNX(ctx, ForumKey, forumEntry.Id, json).Err(); err != nil {
 		return err
 	}
 
@@ -42,7 +45,7 @@ func SaveForumEntry(rdb *redis.Client, ctx context.Context, forumEntry *forum.En
 }
 
 func GetForumEntries(rdb *redis.Client, ctx context.Context) ([]*forum.Entry, error) {
-	result, err := rdb.HGetAll(ctx, "forum").Result()
+	result, err := rdb.HGetAll(ctx, ForumKey).Result()
 	if err != nil {
 		return []*forum.Entry{}, err
 	}
@@ -64,7 +67,7 @@ func GetForumEntries(rdb *redis.Client, ctx context.Context) ([]*forum.Entry, er
 }
 
 func DeleteForumEntry(rdb *redis.Client, ctx context.Context, id string) error {
-	if err := rdb.HDel(ctx, "forum", id).Err(); err != nil {
+	if err := rdb.HDel(ctx, ForumKey, id).Err(); err != nil {
 		return err
 	}
 
