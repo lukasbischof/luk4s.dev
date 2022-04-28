@@ -31,4 +31,4 @@ COPY --from=build-assets /var/build/public ./public
 COPY "views/" "./views"
 
 EXPOSE 3000
-CMD ["/opt/luk4s.dev/luk4s.dev"]
+CMD ["sh", "-c", "/opt/luk4s.dev/luk4s.dev"]

@@ -44,6 +44,7 @@ func boot() (*fiber.App, *redis.Client) {
 		ViewsLayout:             "layouts/application",
 		ServerHeader:            "wordprezz",
 		EnableTrustedProxyCheck: true,
+		Prefork:                 getEnv("PREFORK", "0") == "1",
 	})
 
 	app.Use(compress.New(compress.Config{
