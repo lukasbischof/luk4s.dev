@@ -30,5 +30,8 @@ COPY --from=build-binary /go/bin/luk4s.dev ./
 COPY --from=build-assets /var/build/public ./public
 COPY "views/" "./views"
 
+ENV HCAPTCHA_SITE_KEY="${HCAPTCHA_SITE_KEY}"
+ENV HCAPTCHA_SECRET_KEY="${HCAPTCHA_SECRET_KEY}"
+
 EXPOSE 3000
 CMD ["sh", "-c", "/opt/luk4s.dev/luk4s.dev"]

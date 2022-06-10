@@ -3,3 +3,5 @@ public/build/
 luk4s.dev
 redis-data/
 tmp/
+build/
+.env

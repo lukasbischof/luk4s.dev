@@ -2,13 +2,11 @@ package app
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
-	"github.com/qinains/fastergoding"
 	"log"
 	"os"
 	"strconv"
@@ -17,11 +15,6 @@ import (
 var ctx = context.Background()
 
 func Run() {
-	if os.Getenv("APP_ENV") == "development" {
-		fastergoding.Run()
-		fmt.Println("Starting with Fastergoding")
-	}
-
 	app, rdb := boot()
 
 	MountRoot(app, rdb)

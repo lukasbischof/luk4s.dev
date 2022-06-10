@@ -16,10 +16,11 @@ var (
 )
 
 type Entry struct {
-	Id      string
-	Content string    `json:"content" validate:"nonzero"`
-	Author  string    `json:"author" validate:"nonzero"`
-	Created time.Time `json:"created"`
+	Id              string
+	Content         string    `json:"content" form:"content" validate:"nonzero"`
+	Author          string    `json:"author" form:"author" validate:"nonzero"`
+	CaptchaResponse string    `form:"h-captcha-response" json:"-" validate:"nonzero"`
+	Created         time.Time `json:"created"`
 }
 
 func FromJson(data []byte) (*Entry, error) {
