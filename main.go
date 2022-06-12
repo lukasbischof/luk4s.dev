@@ -10,8 +10,7 @@ import (
 func main() {
 	if os.Getenv("APP_ENV") == "development" {
 		log.Println("Starting in development mode")
-		err := godotenv.Load()
-		if err != nil {
+		if err := godotenv.Load(); err != nil {
 			log.Fatal("Error loading .env file")
 		}
 	}
