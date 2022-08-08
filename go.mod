@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gofiber/fiber/v2 v2.36.0
-	github.com/gofiber/template v1.6.29
+	github.com/gofiber/template v1.6.30
 	github.com/joho/godotenv v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.19
 	golang.org/x/text v0.3.7
