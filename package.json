@@ -16,7 +16,7 @@
     "homepage": "https://github.com/lukasbischof/luk4s.dev#readme",
     "dependencies": {
         "autoprefixer": "^10.4.4",
-        "esbuild": "^0.14.36",
+        "esbuild": "^0.15.4",
         "esbuild-sass-plugin": "^2.2.6",
         "postcss": "^8.4.12",
         "postcss-minify": "^1.1.0",
