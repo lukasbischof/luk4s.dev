@@ -14,6 +14,7 @@ await esbuild.build({
     assetNames: "images/[name]",
     publicPath: "",
     loader: { ".jpeg": "file", ".svg": "file", },
+    minify: true,
     plugins: [sassPlugin({
         transform: async (source) => {
             const processor = postcss([
