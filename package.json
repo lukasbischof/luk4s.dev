@@ -17,7 +17,7 @@
     "dependencies": {
         "autoprefixer": "^10.4.13",
         "esbuild": "^0.15.16",
-        "esbuild-sass-plugin": "^2.4.0",
+        "esbuild-sass-plugin": "^2.4.1",
         "postcss": "^8.4.19",
         "postcss-minify": "^1.1.0",
         "postcss-preset-env": "^7.8.3"
