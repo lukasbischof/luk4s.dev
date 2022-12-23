@@ -71,6 +71,8 @@
                     input(type="text", name="author", placeholder="Author" autocomplete="autocomplete")
                 .content
                     textarea(name="content", placeholder="Content" autocomplete="of")
+                    br
+                    small Maximum 800 characters
                 .captcha
                     div(class="h-captcha" data-sitekey="{{.siteKey}}")
                 input(type="submit", value="Send")

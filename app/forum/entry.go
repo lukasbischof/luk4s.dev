@@ -17,7 +17,7 @@ var (
 
 type Entry struct {
 	Id              string
-	Content         string    `json:"content" form:"content" validate:"nonzero"`
+	Content         string    `json:"content" form:"content" validate:"nonzero,max=800"`
 	Author          string    `json:"author" form:"author" validate:"nonzero"`
 	CaptchaResponse string    `form:"h-captcha-response" json:"-" validate:"nonzero"`
 	Created         time.Time `json:"created"`
