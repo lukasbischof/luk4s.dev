@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-import { sassPlugin } from "esbuild-sass-plugin";
-import esbuild from "esbuild";
 import autoprefixer from "autoprefixer";
+import esbuild from "esbuild";
+import minify from "postcss-minify";
 import postcss from "postcss";
 import postcssPresetEnv from "postcss-preset-env";
-import minify from "postcss-minify";
+import { sassPlugin } from "esbuild-sass-plugin";
 
 await esbuild.build({
-    entryPoints: ["assets/entrypoints/application.scss"],
-    bundle: true,
-    outdir: "public/build",
     assetNames: "images/[name]",
-    publicPath: "",
-    loader: { ".jpeg": "file", ".svg": "file", },
+    bundle: true,
+    entryPoints: ["assets/entrypoints/application.scss"],
+    loader: { ".jpeg": "file", ".svg": "file" },
     minify: true,
+    outdir: "public/build",
+    publicPath: "",
     plugins: [sassPlugin({
         transform: async (source) => {
             const processor = postcss([
