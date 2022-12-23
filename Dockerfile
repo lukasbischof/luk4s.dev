@@ -11,14 +11,16 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -v -o /go/bin/luk4s.
 
 FROM node:latest AS build-assets
 
+RUN npm i -g pnpm
+
 WORKDIR "/var/build"
 
 COPY assets/ ./assets
 COPY bin/ ./bin
 COPY public/ ./public
-COPY ["package.json", "package-lock.json", "./"]
-RUN npm install
-RUN npm run build
+COPY ["package.json", "pnpm-lock.yaml", "./"]
+RUN pnpm install
+RUN pnpm run build
 
 FROM alpine:3.15.4
 
