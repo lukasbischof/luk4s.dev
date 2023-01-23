@@ -8,7 +8,7 @@ require (
 	github.com/gofiber/template v1.7.4
 	github.com/joho/godotenv v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.21
-	golang.org/x/text v0.5.0
+	golang.org/x/text v0.6.0
 	gopkg.in/validator.v2 v2.0.1
 )
 
