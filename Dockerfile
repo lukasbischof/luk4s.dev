@@ -22,7 +22,7 @@ COPY ["package.json", "pnpm-lock.yaml", "./"]
 RUN pnpm install
 RUN pnpm run build
 
-FROM alpine:3.15.4
+FROM alpine:3.18.0
 
 MAINTAINER Lukas Bischof
 
