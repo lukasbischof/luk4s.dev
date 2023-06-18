@@ -8,8 +8,8 @@ dependencies:
     specifier: ^0.18.2
     version: 0.18.2
   esbuild-sass-plugin:
-    specifier: ^2.4.4
-    version: 2.4.4
+    specifier: ^2.4.5
+    version: 2.4.5
   postcss:
     specifier: ^8.4.20
     version: 8.4.20
@@ -827,8 +827,8 @@ packages:
     dev: false
     optional: true
 
-  /esbuild-sass-plugin@2.4.4:
-    resolution: {integrity: sha512-nxyscxQbvKcy12rLOh52zDqk0anOvWIdUcAlvaoCVQcpmR9GkrFbyGLsRNpoEYyB3Rho9Raq+YE6A6ehMDkN0g==}
+  /esbuild-sass-plugin@2.4.5:
+    resolution: {integrity: sha512-di2hLaIwhRXe513uaPPxv+5bjynxAgrS8R+u38lbBfvp1g1xOki4ACXV2aXip2CRPGTbAVDySSxujd9iArFV0w==}
     dependencies:
       esbuild: 0.15.18
       resolve: 1.22.1
