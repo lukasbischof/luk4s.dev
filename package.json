@@ -18,7 +18,7 @@
         "autoprefixer": "^10.4.16",
         "esbuild": "^0.19.8",
         "esbuild-sass-plugin": "^2.16.0",
-        "postcss": "^8.4.31",
+        "postcss": "^8.4.32",
         "postcss-minify": "^1.1.0",
         "postcss-preset-env": "^9.3.0"
     }
