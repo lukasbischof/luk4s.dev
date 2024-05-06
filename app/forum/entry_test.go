@@ -2,6 +2,7 @@ package forum
 
 import (
 	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 )
 
@@ -57,4 +58,42 @@ func TestToJsonReturnsValidJsonForValidEntry(t *testing.T) {
 	assert.NotEmpty(t, json)
 	assert.Contains(t, json, "Test Content")
 	assert.Contains(t, json, "Test Author")
+}
+
+func TestValidateReturnsErrorForEmptyContent(t *testing.T) {
+	entry := &Entry{
+		Content:         "",
+		Author:          "Test Author",
+		CaptchaResponse: "valid-captcha",
+	}
+
+	err := entry.Validate()
+
+	assert.NotNil(t, err)
+	assert.Equal(t, err.Error(), "Content: zero value")
+}
+
+func TestValidateReturnsErrorForEmptyAuthor(t *testing.T) {
+	entry := &Entry{
+		Content:         "Test Content",
+		Author:          "",
+		CaptchaResponse: "valid-captcha",
+	}
+
+	err := entry.Validate()
+
+	assert.NotNil(t, err)
+	assert.Equal(t, err.Error(), "Author: zero value")
+}
+
+func TestValidateReturnsErrorForContentExceedingMaxLength(t *testing.T) {
+	entry := &Entry{
+		Content:         strings.Repeat("a", 801),
+		Author:          "Test Author",
+		CaptchaResponse: "valid-captcha",
+	}
+
+	err := entry.Validate()
+
+	assert.NotNil(t, err)
 }
