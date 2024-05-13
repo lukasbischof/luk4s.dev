@@ -10,7 +10,7 @@ require (
 	github.com/gofiber/template v1.8.1
 	github.com/joho/godotenv v1.5.1
 	github.com/microcosm-cc/bluemonday v1.0.26
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.9.0
 	golang.org/x/text v0.15.0
 	gopkg.in/validator.v2 v2.0.1
 )
@@ -36,5 +36,5 @@ require (
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
