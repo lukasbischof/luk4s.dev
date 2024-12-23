@@ -35,7 +35,7 @@ jobs:
                     password: ${{ secrets.GITHUB_TOKEN }}
             -   name: Docker meta
                 id: meta
-                uses: crazy-max/ghaction-docker-meta@v5.5.1
+                uses: crazy-max/ghaction-docker-meta@v5.6.1
                 with:
                     images: |
                         ghcr.io/lukasbischof/luk4s.dev
