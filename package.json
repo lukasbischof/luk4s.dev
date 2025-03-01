@@ -16,9 +16,9 @@
   "homepage": "https://github.com/lukasbischof/luk4s.dev#readme",
   "dependencies": {
     "autoprefixer": "^10.4.16",
-    "caniuse-lite": "^1.0.30001700",
+    "caniuse-lite": "^1.0.30001701",
     "esbuild": "^0.25.0",
-    "esbuild-sass-plugin": "^2.16.0",
+    "esbuild-sass-plugin": "^3.3.1",
     "postcss": "^8.4.32",
     "postcss-minify": "^1.1.0",
     "postcss-preset-env": "^10.0.3"
