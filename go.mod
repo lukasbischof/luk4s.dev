@@ -1,8 +1,8 @@
 module github.com/lukasbischof/luk4s.dev
 
-go 1.21
+go 1.23.0
 
-toolchain go1.22.0
+toolchain go1.24.0
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
@@ -11,7 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/text v0.22.0
+	golang.org/x/text v0.23.0
 	gopkg.in/validator.v2 v2.0.1
 )
 
