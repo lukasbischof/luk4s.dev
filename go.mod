@@ -1,7 +1,8 @@
 module github.com/lukasbischof/luk4s.dev
 
-go 1.21
-toolchain go1.23.7
+go 1.23.0
+
+toolchain go1.24.0
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
