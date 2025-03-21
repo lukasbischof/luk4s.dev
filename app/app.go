@@ -8,6 +8,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/rs/zerolog"
+	sqldblogger "github.com/simukti/sqldb-logger"
+	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
 	"log"
 	"os"
 )
@@ -58,8 +61,15 @@ func boot() (*fiber.App, *sql.DB) {
 		Browse:   os.Getenv("APP_ENV") == "development",
 	})
 
-	db, err := sql.Open("sqlite3", getEnv("APP_DB", "./luk4s.db"))
+	dataSourceName := getEnv("APP_DB", "./luk4s.db")
+	db, err := sql.Open("sqlite3", dataSourceName)
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	loggerAdapter := zerologadapter.New(zerolog.New(os.Stdout))
+	db = sqldblogger.OpenDriver(dataSourceName, db.Driver(), loggerAdapter)
+	if err = db.Ping(); err != nil {
 		log.Fatal(err)
 	}
 
