@@ -79,6 +79,10 @@ func GetForumEntries(db *sql.DB) ([]*forum.Entry, error) {
 		i++
 	}
 
+	if err = rows.Err(); err != nil {
+		return []*forum.Entry{}, err
+	}
+
 	return entriesList, nil
 }
 

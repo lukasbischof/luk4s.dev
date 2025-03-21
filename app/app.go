@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
@@ -64,12 +65,14 @@ func boot() (*fiber.App, *sql.DB) {
 	dataSourceName := getEnv("APP_DB", "./luk4s.db")
 	db, err := sql.Open("sqlite3", dataSourceName)
 	if err != nil {
+		fmt.Errorf("cannot open database")
 		log.Fatal(err)
 	}
 
 	loggerAdapter := zerologadapter.New(zerolog.New(os.Stdout))
 	db = sqldblogger.OpenDriver(dataSourceName, db.Driver(), loggerAdapter)
 	if err = db.Ping(); err != nil {
+		fmt.Errorf("cannot reach database")
 		log.Fatal(err)
 	}
 
