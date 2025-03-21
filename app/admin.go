@@ -1,14 +1,15 @@
 package app
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"os"
+	"strconv"
 )
 
-func MountAdmin(app *fiber.App, rdb *redis.Client) {
+func MountAdmin(app *fiber.App, db *sql.DB) {
 	admin := app.Group("/admin", func(c *fiber.Ctx) error {
 		c.Accepts("html", "text/html")
 		c.Set("X-Content-Type-Options", "nosniff")
@@ -26,7 +27,7 @@ func MountAdmin(app *fiber.App, rdb *redis.Client) {
 	})
 
 	admin.Get("/forum", func(c *fiber.Ctx) error {
-		forumEntries, err := GetForumEntries(rdb, ctx)
+		forumEntries, err := GetForumEntries(db)
 		if err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
@@ -37,8 +38,13 @@ func MountAdmin(app *fiber.App, rdb *redis.Client) {
 	})
 
 	admin.Post("/forum/:id/delete", func(c *fiber.Ctx) error {
-		id := c.Params("id")
-		if err := DeleteForumEntry(rdb, ctx, id); err != nil {
+		id, err := strconv.Atoi(c.Params("id"))
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		if err = DeleteForumEntry(db, id); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 			return err
 		}

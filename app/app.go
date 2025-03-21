@@ -2,23 +2,27 @@ package app
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"database/sql"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
-	"strconv"
 )
 
 var ctx = context.Background()
 
 func Run() {
-	app, rdb := boot()
+	app, db := boot()
 
-	MountRoot(app, rdb)
-	MountAdmin(app, rdb)
+	defer func(db *sql.DB) {
+		_ = db.Close()
+	}(db)
+
+	MountRoot(app, db)
+	MountAdmin(app, db)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.
@@ -29,7 +33,7 @@ func Run() {
 	log.Fatal(app.Listen(":3000"))
 }
 
-func boot() (*fiber.App, *redis.Client) {
+func boot() (*fiber.App, *sql.DB) {
 	engine := pug.New("./views", ".pug")
 	app := fiber.New(fiber.Config{
 		Views:                   engine,
@@ -54,18 +58,12 @@ func boot() (*fiber.App, *redis.Client) {
 		Browse:   os.Getenv("APP_ENV") == "development",
 	})
 
-	redisDb, err := strconv.ParseInt(getEnv("REDIS_DB", "0"), 10, 32)
+	db, err := sql.Open("sqlite3", getEnv("APP_DB", "./luk4s.db"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     getEnv("REDIS_ADDR", "localhost:6379"),
-		Password: getEnv("REDIS_PASSWORD", ""),
-		DB:       int(redisDb),
-	})
-
-	return app, rdb
+	return app, db
 }
 
 func getEnv(key, fallback string) string {

@@ -1,8 +1,8 @@
 package app
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/lukasbischof/luk4s.dev/app/forum"
 	"github.com/lukasbischof/luk4s.dev/app/hcaptcha"
@@ -11,23 +11,23 @@ import (
 	"os"
 )
 
-func MountRoot(app *fiber.App, rdb *redis.Client) {
+func MountRoot(app *fiber.App, db *sql.DB) {
 	app.Get("/", func(c *fiber.Ctx) error {
-		return renderIndex(c, rdb)
+		return renderIndex(c, db)
 	})
 
 	app.Post("/forum", func(c *fiber.Ctx) error {
-		return handleForumEntryCreateRequest(c, rdb)
+		return handleForumEntryCreateRequest(c, db)
 	})
 }
 
-func renderIndex(c *fiber.Ctx, rdb *redis.Client) error {
-	visitorCount, err := IncreaseVisitorCount(rdb, ctx)
+func renderIndex(c *fiber.Ctx, db *sql.DB) error {
+	visitorCount, err := IncreaseVisitorCount(db)
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 	}
 
-	forumEntries, err := GetForumEntries(rdb, ctx)
+	forumEntries, err := GetForumEntries(db)
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 	}
@@ -39,7 +39,7 @@ func renderIndex(c *fiber.Ctx, rdb *redis.Client) error {
 	})
 }
 
-func handleForumEntryCreateRequest(c *fiber.Ctx, rdb *redis.Client) error {
+func handleForumEntryCreateRequest(c *fiber.Ctx, db *sql.DB) error {
 	entry := new(forum.Entry)
 	if err := c.BodyParser(entry); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
@@ -58,7 +58,7 @@ func handleForumEntryCreateRequest(c *fiber.Ctx, rdb *redis.Client) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid captcha")
 	}
 
-	err = SaveForumEntry(rdb, ctx, entry)
+	err = SaveForumEntry(db, entry)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}

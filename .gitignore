@@ -5,3 +5,4 @@ redis-data/
 tmp/
 build/
 .env
+luk4s.db
