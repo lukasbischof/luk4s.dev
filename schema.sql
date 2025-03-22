@@ -1,4 +1,4 @@
-CREATE TABLE forum_entries
+CREATE TABLE IF NOT EXISTS forum_entries
 (
     id               INTEGER NOT NULL
         CONSTRAINT forum_entries_pk
@@ -9,7 +9,9 @@ CREATE TABLE forum_entries
     created          INTEGER NOT NULL
 );
 
-CREATE TABLE stats
+CREATE TABLE IF NOT EXISTS stats
 (
     visitors INTEGER NOT NULL
 );
+
+INSERT INTO stats (visitors) VALUES (0);

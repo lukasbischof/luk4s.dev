@@ -69,6 +69,12 @@ func boot() (*fiber.App, *sql.DB) {
 	})
 
 	db := connectDB()
+	err := InitializeDatabase(db)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println("Database initialized")
+	}
 
 	return app, db
 }
@@ -87,6 +93,7 @@ func connectDB() *sql.DB {
 		fmt.Errorf("cannot reach database")
 		log.Fatal(err)
 	}
+
 	return db
 }
 

@@ -3,6 +3,7 @@ package app
 import (
 	"database/sql"
 	"github.com/lukasbischof/luk4s.dev/app/forum"
+	"os"
 	"time"
 )
 
@@ -70,6 +71,17 @@ func GetForumEntries(db *sql.DB) ([]*forum.Entry, error) {
 
 func DeleteForumEntry(db *sql.DB, id int) error {
 	_, err := db.Exec("DELETE FROM forum_entries WHERE id = ?", id)
+	return err
+}
+
+func InitializeDatabase(db *sql.DB) error {
+	schemaFile, err := os.ReadFile("schema.sql")
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(string(schemaFile))
+
 	return err
 }
 

@@ -29,6 +29,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /opt/luk4s.dev
 COPY --from=build-binary /go/bin/luk4s.dev ./
 COPY --from=build-assets /usr/src/app/public ./public
+COPY "schema.sql" "./"
 COPY "views/" "./views"
 
 EXPOSE 3000
