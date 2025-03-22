@@ -6,29 +6,13 @@ import (
 	"time"
 )
 
-const VisitorCountKey = "visitor-count"
-const ForumKey = "forum-entries"
-
 func IncreaseVisitorCount(db *sql.DB) (int, error) {
-	rows, err := db.Query("UPDATE stats SET visitors = visitors + 1 RETURNING visitors")
-	if err != nil {
-		return 0, err
-	}
+	visitorCount := 0
+	err := singleRowQuery(db, "UPDATE stats SET visitors = visitors + 1 RETURNING visitors", func(rows *sql.Rows) error {
+		return rows.Scan(&visitorCount)
+	})
 
-	defer rows.Close()
-
-	var visitorCount int
-	for rows.Next() {
-		if err = rows.Scan(&visitorCount); err != nil {
-			return 0, err
-		}
-	}
-
-	if err = rows.Err(); err != nil {
-		return 0, err
-	}
-
-	return visitorCount, nil
+	return visitorCount, err
 }
 
 func SaveForumEntry(db *sql.DB, forumEntry *forum.Entry) error {
@@ -92,23 +76,31 @@ func DeleteForumEntry(db *sql.DB, id int) error {
 }
 
 func getForumEntriesCount(db *sql.DB) (int, error) {
-	rows, err := db.Query("SELECT COUNT(*) FROM forum_entries")
+	count := 0
+	err := singleRowQuery(db, "SELECT COUNT(*) FROM forum_entries", func(rows *sql.Rows) error {
+		return rows.Scan(&count)
+	})
+
+	return count, err
+}
+
+func singleRowQuery(db *sql.DB, query string, valueAssignment func(*sql.Rows) error) error {
+	rows, err := db.Query(query)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
 	defer rows.Close()
 
-	var count int
 	for rows.Next() {
-		if err = rows.Scan(&count); err != nil {
-			return 0, err
+		if err = valueAssignment(rows); err != nil {
+			return err
 		}
 	}
 
 	if err = rows.Err(); err != nil {
-		return 0, err
+		return err
 	}
 
-	return count, nil
+	return nil
 }

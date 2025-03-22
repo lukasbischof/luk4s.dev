@@ -12,8 +12,10 @@ import (
 	"github.com/rs/zerolog"
 	sqldblogger "github.com/simukti/sqldb-logger"
 	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
+	"html/template"
 	"log"
 	"os"
+	"time"
 )
 
 var ctx = context.Background()
@@ -39,6 +41,10 @@ func Run() {
 
 func boot() (*fiber.App, *sql.DB) {
 	engine := pug.New("./views", ".pug")
+	engine.AddFunc("formatDateTime", func(t time.Time) template.HTML {
+		return template.HTML(t.Format(time.DateTime))
+	})
+
 	app := fiber.New(fiber.Config{
 		Views:                   engine,
 		AppName:                 "luk4s.dev",
@@ -62,6 +68,12 @@ func boot() (*fiber.App, *sql.DB) {
 		Browse:   os.Getenv("APP_ENV") == "development",
 	})
 
+	db := connectDB()
+
+	return app, db
+}
+
+func connectDB() *sql.DB {
 	dataSourceName := getEnv("APP_DB", "./luk4s.db")
 	db, err := sql.Open("sqlite3", dataSourceName)
 	if err != nil {
@@ -75,8 +87,7 @@ func boot() (*fiber.App, *sql.DB) {
 		fmt.Errorf("cannot reach database")
 		log.Fatal(err)
 	}
-
-	return app, db
+	return db
 }
 
 func getEnv(key, fallback string) string {

@@ -60,7 +60,7 @@
             hr
             h2 Guestbook
             | {{range .forumEntries}}
-                i Authored by #[b #{.Author}] on #{.Created}
+                i Authored by #[b #{.Author}] on #{formatDateTime .Created}
                 p #{.Content}
                 br
                 hr
