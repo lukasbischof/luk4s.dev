@@ -22,16 +22,15 @@ RUN bun run build
 
 FROM alpine:3.18.0
 
-MAINTAINER Lukas Bischof
+LABEL org.opencontainers.image.authors="Lukas Bischof <me@luk4s.dev>"
+LABEL org.opencontainers.image.url="https://github.com/lukasbischof/luk4s.dev"
 
 RUN apk --no-cache add ca-certificates
 WORKDIR /opt/luk4s.dev
 COPY --from=build-binary /go/bin/luk4s.dev ./
 COPY --from=build-assets /usr/src/app/public ./public
+COPY "schema.sql" "./"
 COPY "views/" "./views"
-
-ENV HCAPTCHA_SITE_KEY="${HCAPTCHA_SITE_KEY}"
-ENV HCAPTCHA_SECRET_KEY="${HCAPTCHA_SECRET_KEY}"
 
 EXPOSE 3000
 CMD ["sh", "-c", "/opt/luk4s.dev/luk4s.dev"]

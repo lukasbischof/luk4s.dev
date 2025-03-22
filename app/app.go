@@ -2,23 +2,33 @@ package app
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"database/sql"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
+	"github.com/rs/zerolog"
+	sqldblogger "github.com/simukti/sqldb-logger"
+	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
+	"html/template"
 	"log"
+	_ "modernc.org/sqlite"
 	"os"
-	"strconv"
+	"time"
 )
 
 var ctx = context.Background()
 
 func Run() {
-	app, rdb := boot()
+	app, db := boot()
 
-	MountRoot(app, rdb)
-	MountAdmin(app, rdb)
+	defer func(db *sql.DB) {
+		_ = db.Close()
+	}(db)
+
+	MountRoot(app, db)
+	MountAdmin(app, db)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.
@@ -29,8 +39,12 @@ func Run() {
 	log.Fatal(app.Listen(":3000"))
 }
 
-func boot() (*fiber.App, *redis.Client) {
+func boot() (*fiber.App, *sql.DB) {
 	engine := pug.New("./views", ".pug")
+	engine.AddFunc("formatDateTime", func(t time.Time) template.HTML {
+		return template.HTML(t.Format(time.DateTime))
+	})
+
 	app := fiber.New(fiber.Config{
 		Views:                   engine,
 		AppName:                 "luk4s.dev",
@@ -54,18 +68,33 @@ func boot() (*fiber.App, *redis.Client) {
 		Browse:   os.Getenv("APP_ENV") == "development",
 	})
 
-	redisDb, err := strconv.ParseInt(getEnv("REDIS_DB", "0"), 10, 32)
+	db := connectDB()
+	err := InitializeDatabase(db)
 	if err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println("Database initialized")
+	}
+
+	return app, db
+}
+
+func connectDB() *sql.DB {
+	dataSourceName := getEnv("APP_DB", "./luk4s.db")
+	db, err := sql.Open("sqlite", dataSourceName)
+	if err != nil {
+		fmt.Errorf("cannot open database")
 		log.Fatal(err)
 	}
 
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     getEnv("REDIS_ADDR", "localhost:6379"),
-		Password: getEnv("REDIS_PASSWORD", ""),
-		DB:       int(redisDb),
-	})
+	loggerAdapter := zerologadapter.New(zerolog.New(os.Stdout))
+	db = sqldblogger.OpenDriver(dataSourceName, db.Driver(), loggerAdapter)
+	if err = db.Ping(); err != nil {
+		fmt.Errorf("cannot reach database")
+		log.Fatal(err)
+	}
 
-	return app, rdb
+	return db
 }
 
 func getEnv(key, fallback string) string {

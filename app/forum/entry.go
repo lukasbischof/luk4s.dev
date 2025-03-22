@@ -1,8 +1,6 @@
 package forum
 
 import (
-	"encoding/json"
-	"github.com/gofiber/fiber/v2/utils"
 	"github.com/microcosm-cc/bluemonday"
 	"gopkg.in/validator.v2"
 	"strings"
@@ -16,20 +14,11 @@ var (
 )
 
 type Entry struct {
-	Id              string
+	Id              int
 	Content         string    `json:"content" form:"content" validate:"nonzero,max=800"`
 	Author          string    `json:"author" form:"author" validate:"nonzero"`
 	CaptchaResponse string    `form:"h-captcha-response" json:"-" validate:"nonzero"`
 	Created         time.Time `json:"created"`
-}
-
-func FromJson(data []byte) (*Entry, error) {
-	var entry Entry
-	err := json.Unmarshal(data, &entry)
-	if err != nil {
-		return nil, err
-	}
-	return &entry, nil
 }
 
 func (entry *Entry) Process() *Entry {
@@ -47,7 +36,6 @@ func (entry *Entry) Process() *Entry {
 		strings.TrimSpace(entry.Author),
 	)
 
-	entry.Id = utils.UUID()
 	entry.Created = time.Now()
 
 	return entry
@@ -55,13 +43,4 @@ func (entry *Entry) Process() *Entry {
 
 func (entry *Entry) Validate() error {
 	return validator.Validate(entry)
-}
-
-func (entry *Entry) ToJson() (string, error) {
-	marshal, err := json.Marshal(entry)
-	if err != nil {
-		return "", err
-	}
-
-	return string(marshal), nil
 }
