@@ -1,33 +1,13 @@
-version: "3.9"
-
-networks:
-    redis:
-        internal: true
+volumes:
+    sqlite:
+        external: true
+        name: luk4s.dev.sqlite
 
 services:
     web:
         image: luk4s.dev
-        networks: [redis,default]
         environment:
-            - REDIS_ADDR=redis:6379
+            - APP_DB=./db/sqlite.db
             - ADMIN_PASSWORD=admin
-        ports:
-            - "3000:3000"
-    redis:
-        image: redis:6-alpine
-        hostname: redis
-        container_name: redis
-        volumes:
-            - ./redis.conf:/usr/local/etc/redis/redis.conf
-            - ./redis-data:/data
-        networks: [redis]
-        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    redis-commander:
-        image: rediscommander/redis-commander:latest
-        container_name: redis-commander
-        hostname: redis-commander
-        networks: [redis, default]
-        environment:
-            - REDIS_HOSTS=local:redis:6379
-        ports:
-            - "8081:8081"
+        ports: ["3000:3000"]
+        volumes: ["sqlite:/opt/luk4s.dev/db"]
