@@ -8,9 +8,7 @@ import (
 
 func IncreaseVisitorCount(db *sql.DB) (int, error) {
 	visitorCount := 0
-	err := singleRowQuery(db, "UPDATE stats SET visitors = visitors + 1 RETURNING visitors", func(rows *sql.Rows) error {
-		return rows.Scan(&visitorCount)
-	})
+	err := db.QueryRow("UPDATE stats SET visitors = visitors + 1 RETURNING visitors").Scan(&visitorCount)
 
 	return visitorCount, err
 }
@@ -77,30 +75,7 @@ func DeleteForumEntry(db *sql.DB, id int) error {
 
 func getForumEntriesCount(db *sql.DB) (int, error) {
 	count := 0
-	err := singleRowQuery(db, "SELECT COUNT(*) FROM forum_entries", func(rows *sql.Rows) error {
-		return rows.Scan(&count)
-	})
+	err := db.QueryRow("SELECT COUNT(*) FROM forum_entries").Scan(&count)
 
 	return count, err
-}
-
-func singleRowQuery(db *sql.DB, query string, valueAssignment func(*sql.Rows) error) error {
-	rows, err := db.Query(query)
-	if err != nil {
-		return err
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		if err = valueAssignment(rows); err != nil {
-			return err
-		}
-	}
-
-	if err = rows.Err(); err != nil {
-		return err
-	}
-
-	return nil
 }

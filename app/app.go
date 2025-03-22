@@ -8,12 +8,12 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/template/pug"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog"
 	sqldblogger "github.com/simukti/sqldb-logger"
 	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
 	"html/template"
 	"log"
+	_ "modernc.org/sqlite"
 	"os"
 	"time"
 )
@@ -75,7 +75,7 @@ func boot() (*fiber.App, *sql.DB) {
 
 func connectDB() *sql.DB {
 	dataSourceName := getEnv("APP_DB", "./luk4s.db")
-	db, err := sql.Open("sqlite3", dataSourceName)
+	db, err := sql.Open("sqlite", dataSourceName)
 	if err != nil {
 		fmt.Errorf("cannot open database")
 		log.Fatal(err)

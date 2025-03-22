@@ -7,7 +7,7 @@ WORKDIR "/go/src/github.com/lukasbischof/luk4s.dev/"
 COPY ["go.mod", "go.sum", "*.go", "./"]
 RUN go mod download && go mod verify
 COPY app ./app
-RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -v -o /go/bin/luk4s.dev .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -v -o /go/bin/luk4s.dev .
 
 FROM oven/bun:1 AS build-assets
 
