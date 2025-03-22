@@ -9,3 +9,7 @@ CREATE TABLE forum_entries
     created          INTEGER NOT NULL
 );
 
+CREATE TABLE stats
+(
+    visitors INTEGER NOT NULL
+);
