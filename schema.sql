@@ -13,5 +13,3 @@ CREATE TABLE IF NOT EXISTS stats
 (
     visitors INTEGER NOT NULL
 );
-
-INSERT INTO stats (visitors) VALUES (0);

@@ -44,6 +44,9 @@ func boot() (*fiber.App, *sql.DB) {
 	engine.AddFunc("formatDateTime", func(t time.Time) template.HTML {
 		return template.HTML(t.Format(time.DateTime))
 	})
+	engine.AddFunc("safeHTML", func(s string) template.HTML {
+		return template.HTML(s)
+	})
 
 	app := fiber.New(fiber.Config{
 		Views:                   engine,

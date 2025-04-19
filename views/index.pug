@@ -61,7 +61,7 @@
             h2 Guestbook
             | {{range .forumEntries}}
                 i Authored by #[b #{.Author}] on #{formatDateTime .Created}
-                p #{.Content}
+                p #{safeHTML .Content}
                 br
                 hr
             | {{end}}
