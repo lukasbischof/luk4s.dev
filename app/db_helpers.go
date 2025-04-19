@@ -39,7 +39,7 @@ func GetForumEntries(db *sql.DB) ([]*forum.Entry, error) {
 		return []*forum.Entry{}, err
 	}
 
-	rows, err := db.Query("SELECT id, content, author, created FROM forum_entries")
+	rows, err := db.Query("SELECT id, content, author, created FROM forum_entries ORDER BY created DESC")
 	defer rows.Close()
 
 	if err != nil {
