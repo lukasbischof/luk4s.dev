@@ -6,5 +6,19 @@
         br
         form(action="/admin/forum/{{.Id}}/delete" method="post")
             input(type="submit" value="🗑 Delete" class="btn btn-danger")
+        br
+        br
+        | {{$replies := index $.forumReplies .Id}}
+        | {{if $replies}}
+            | {{range $replies}}
+                div(class="forum-reply")
+                    i Reply on #{formatDateTime .Created}
+                    p #{safeHTML .Content}
+            | {{end}}
+        | {{end}}
+        form(action="/admin/forum/{{.Id}}/reply" method="post")
+            div(style="margin-top: 10px;")
+                textarea(name="content" placeholder="Write a reply..." rows="3" style="width: 100%; margin-bottom: 10px;")
+                input(type="submit" value="Reply" class="btn btn-primary")
         hr
     | {{end}}

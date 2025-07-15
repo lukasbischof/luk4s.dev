@@ -32,8 +32,15 @@ func renderIndex(c *fiber.Ctx, db *sql.DB) error {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 	}
 
+	forumReplies, err := GetAllForumReplies(db)
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err)
+		return c.Status(fiber.StatusInternalServerError).SendString("Internal server error")
+	}
+
 	return c.Render("index", fiber.Map{
 		"forumEntries": forumEntries,
+		"forumReplies": forumReplies,
 		"visitorCount": message.NewPrinter(language.English).Sprintf("%d", visitorCount),
 		"siteKey":      os.Getenv("HCAPTCHA_SITE_KEY"),
 	})
