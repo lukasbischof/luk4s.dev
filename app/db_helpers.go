@@ -134,11 +134,11 @@ func GetForumReplies(db *sql.DB, forumEntryId int) ([]*forum.Reply, error) {
 
 func GetAllForumReplies(db *sql.DB) (map[int][]*forum.Reply, error) {
 	rows, err := db.Query("SELECT id, forum_entry_id, content, created FROM forum_replies ORDER BY created ASC")
-	defer rows.Close()
 
 	if err != nil {
 		return map[int][]*forum.Reply{}, err
 	}
+	defer rows.Close()
 
 	repliesMap := make(map[int][]*forum.Reply)
 	for rows.Next() {
