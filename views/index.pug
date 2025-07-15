@@ -62,6 +62,16 @@
             | {{range .forumEntries}}
                 i Authored by #[b #{.Author}] on #{formatDateTime .Created}
                 p #{safeHTML .Content}
+                | {{$replies := index $.forumReplies .Id}}
+                | {{if $replies}}
+                    | {{range $replies}}
+                        div(class="forum-reply")
+                            i
+                                strong Reply from Lukas
+                                |  on #{formatDateTime .Created}
+                            p #{safeHTML .Content}
+                    | {{end}}
+                | {{end}}
                 br
                 hr
             | {{end}}

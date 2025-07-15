@@ -78,3 +78,18 @@ footer {
     color: $danger;
     font-weight: bold;
 }
+
+.btn.btn-primary {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.forum-reply {
+    margin-left: 20px;
+    margin-top: 10px;
+    border-left: 3px solid #007bff;
+    padding-left: 10px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 10px;
+}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
+	"github.com/lukasbischof/luk4s.dev/app/forum"
 	"os"
 	"strconv"
 )
@@ -32,8 +33,14 @@ func MountAdmin(app *fiber.App, db *sql.DB) {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
 
+		forumReplies, err := GetAllForumReplies(db)
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+		}
+
 		return c.Render("admin/forum/index", fiber.Map{
 			"forumEntries": forumEntries,
+			"forumReplies": forumReplies,
 		})
 	})
 
@@ -45,6 +52,35 @@ func MountAdmin(app *fiber.App, db *sql.DB) {
 		}
 
 		if err = DeleteForumEntry(db, id); err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		return c.Redirect("/admin/forum")
+	})
+
+	admin.Post("/forum/:id/reply", func(c *fiber.Ctx) error {
+		id, err := strconv.Atoi(c.Params("id"))
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		var reply forum.Reply
+		if err := c.BodyParser(&reply); err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		reply.ForumEntryId = id
+		reply.Process()
+
+		if err := reply.Validate(); err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		if err := SaveForumReply(db, &reply); err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 			return err
 		}
