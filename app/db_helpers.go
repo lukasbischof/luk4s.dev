@@ -95,6 +95,7 @@ func SaveForumReply(db *sql.DB, reply *forum.Reply) error {
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
 
 	_, err = stmt.Exec(int64(reply.ForumEntryId), reply.Content, time.Now().Unix())
 	if err != nil {

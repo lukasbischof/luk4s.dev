@@ -35,6 +35,7 @@ func renderIndex(c *fiber.Ctx, db *sql.DB) error {
 	forumReplies, err := GetAllForumReplies(db)
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
+		return c.Status(fiber.StatusInternalServerError).SendString("Internal server error")
 	}
 
 	return c.Render("index", fiber.Map{
