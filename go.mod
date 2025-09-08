@@ -1,6 +1,6 @@
 module github.com/lukasbischof/luk4s.dev
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.1
 
@@ -13,7 +13,7 @@ require (
 	github.com/simukti/sqldb-logger v0.0.0-20230108155151-646c1a075551
 	github.com/simukti/sqldb-logger/logadapter/zerologadapter v0.0.0-20230108155151-646c1a075551
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/text v0.28.0
+	golang.org/x/text v0.29.0
 	gopkg.in/validator.v2 v2.0.1
 	modernc.org/sqlite v1.38.2
 )
