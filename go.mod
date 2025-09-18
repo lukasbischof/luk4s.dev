@@ -15,7 +15,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/text v0.28.0
 	gopkg.in/validator.v2 v2.0.1
-	modernc.org/sqlite v1.38.2
+	modernc.org/sqlite v1.39.0
 )
 
 require (
