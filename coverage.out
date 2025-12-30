@@ -1,9 +1,0 @@
-mode: set
-github.com/lukasbischof/luk4s.dev/app/forum/entry.go:25.38,26.17 1 1
-github.com/lukasbischof/luk4s.dev/app/forum/entry.go:26.17,32.3 4 1
-github.com/lukasbischof/luk4s.dev/app/forum/entry.go:34.2,45.14 4 1
-github.com/lukasbischof/luk4s.dev/app/forum/entry.go:48.38,50.2 1 1
-github.com/lukasbischof/luk4s.dev/app/forum/reply.go:17.38,18.17 1 1
-github.com/lukasbischof/luk4s.dev/app/forum/reply.go:18.17,22.3 3 0
-github.com/lukasbischof/luk4s.dev/app/forum/reply.go:24.2,30.14 3 1
-github.com/lukasbischof/luk4s.dev/app/forum/reply.go:33.38,35.2 1 1

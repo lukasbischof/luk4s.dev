@@ -6,3 +6,4 @@ tmp/
 build/
 .env
 luk4s.db
+*.out
