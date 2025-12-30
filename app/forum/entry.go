@@ -9,14 +9,15 @@ import (
 )
 
 var (
-	once   sync.Once
-	policy *bluemonday.Policy
+	once         sync.Once
+	policy       *bluemonday.Policy
+	strictPolicy *bluemonday.Policy
 )
 
 type Entry struct {
 	Id              int
 	Content         string    `json:"content" form:"content" validate:"nonzero,max=800"`
-	Author          string    `json:"author" form:"author" validate:"nonzero"`
+	Author          string    `json:"author" form:"author" validate:"nonzero,max=100"`
 	CaptchaResponse string    `form:"h-captcha-response" json:"-" validate:"nonzero"`
 	Created         time.Time `json:"created"`
 }
@@ -26,13 +27,16 @@ func (entry *Entry) Process() *Entry {
 		policy = bluemonday.StrictPolicy()
 		policy.AllowElements("b")
 		policy.AllowElements("i")
+
+		strictPolicy = bluemonday.StrictPolicy()
 	})
 
 	entry.Content = policy.Sanitize(
 		strings.TrimSpace(entry.Content),
 	)
 
-	entry.Author = policy.Sanitize(
+	// Strip all HTML tags from Author field
+	entry.Author = strictPolicy.Sanitize(
 		strings.TrimSpace(entry.Author),
 	)
 
