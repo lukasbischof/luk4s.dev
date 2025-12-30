@@ -27,7 +27,7 @@ func (entry *Entry) Process() *Entry {
 		policy = bluemonday.StrictPolicy()
 		policy.AllowElements("b")
 		policy.AllowElements("i")
-		
+
 		strictPolicy = bluemonday.StrictPolicy()
 	})
 
