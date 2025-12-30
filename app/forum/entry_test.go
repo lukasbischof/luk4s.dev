@@ -199,6 +199,7 @@ func TestProcessEntryWithSpecialCharactersInAuthor(t *testing.T) {
 
 	processedEntry := entry.Process()
 
-	// Bluemonday escapes special HTML characters
+	// Bluemonday escapes special HTML characters and strips anything that looks like HTML tags
+	// The <author@example.com> portion is treated as an HTML tag and removed entirely
 	assert.Equal(t, "Author &amp; Co. ", processedEntry.Author)
 }
