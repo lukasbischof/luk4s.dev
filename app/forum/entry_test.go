@@ -17,7 +17,7 @@ func TestProcessEntryWithMaliciousContent(t *testing.T) {
 	assert.Empty(t, processedEntry.Id)
 	assert.NotEmpty(t, processedEntry.Created)
 	assert.Equal(t, "<b>Test Content</b>", processedEntry.Content)
-	assert.Equal(t, "<i>Test Author</i>", processedEntry.Author)
+	assert.Equal(t, "Test Author", processedEntry.Author)
 }
 
 func TestProcessEntryWithEmptyContent(t *testing.T) {
@@ -82,4 +82,52 @@ func TestValidateReturnsErrorForContentExceedingMaxLength(t *testing.T) {
 	err := entry.Validate()
 
 	assert.NotNil(t, err)
+}
+
+func TestValidateReturnsErrorForAuthorExceedingMaxLength(t *testing.T) {
+	entry := &Entry{
+		Content:         "Test Content",
+		Author:          strings.Repeat("a", 101),
+		CaptchaResponse: "valid-captcha",
+	}
+
+	err := entry.Validate()
+
+	assert.NotNil(t, err)
+}
+
+func TestValidateSucceedsForAuthorAtMaxLength(t *testing.T) {
+	entry := &Entry{
+		Content:         "Test Content",
+		Author:          strings.Repeat("a", 100),
+		CaptchaResponse: "valid-captcha",
+	}
+
+	err := entry.Validate()
+
+	assert.Nil(t, err)
+}
+
+func TestProcessEntryStripsAllHtmlTagsFromAuthor(t *testing.T) {
+	entry := &Entry{
+		Content: "<b>Test Content</b>",
+		Author:  "<b>Bold</b><i>Italic</i><div>Div</div><span>Span</span>Plain",
+	}
+
+	processedEntry := entry.Process()
+
+	assert.Equal(t, "<b>Test Content</b>", processedEntry.Content)
+	assert.Equal(t, "BoldItalicDivSpanPlain", processedEntry.Author)
+}
+
+func TestProcessEntryAllowsHtmlTagsInContent(t *testing.T) {
+	entry := &Entry{
+		Content: "<b>Bold</b> and <i>italic</i> content",
+		Author:  "Test Author",
+	}
+
+	processedEntry := entry.Process()
+
+	assert.Equal(t, "<b>Bold</b> and <i>italic</i> content", processedEntry.Content)
+	assert.Equal(t, "Test Author", processedEntry.Author)
 }
