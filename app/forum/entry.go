@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	once   sync.Once
-	policy *bluemonday.Policy
+	once         sync.Once
+	policy       *bluemonday.Policy
+	strictPolicy *bluemonday.Policy
 )
 
 type Entry struct {
@@ -26,6 +27,8 @@ func (entry *Entry) Process() *Entry {
 		policy = bluemonday.StrictPolicy()
 		policy.AllowElements("b")
 		policy.AllowElements("i")
+		
+		strictPolicy = bluemonday.StrictPolicy()
 	})
 
 	entry.Content = policy.Sanitize(
@@ -33,7 +36,6 @@ func (entry *Entry) Process() *Entry {
 	)
 
 	// Strip all HTML tags from Author field
-	strictPolicy := bluemonday.StrictPolicy()
 	entry.Author = strictPolicy.Sanitize(
 		strings.TrimSpace(entry.Author),
 	)
