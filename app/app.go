@@ -1,9 +1,13 @@
 package app
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
+	"html/template"
+	"log"
+	"os"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/etag"
@@ -11,14 +15,8 @@ import (
 	"github.com/rs/zerolog"
 	sqldblogger "github.com/simukti/sqldb-logger"
 	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
-	"html/template"
-	"log"
 	_ "modernc.org/sqlite"
-	"os"
-	"time"
 )
-
-var ctx = context.Background()
 
 func Run() {
 	app, db := boot()
