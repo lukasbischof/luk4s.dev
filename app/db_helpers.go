@@ -40,11 +40,11 @@ func GetForumEntries(db *sql.DB) ([]*forum.Entry, error) {
 	}
 
 	rows, err := db.Query("SELECT id, content, author, created FROM forum_entries ORDER BY created DESC")
-	defer rows.Close()
 
 	if err != nil {
 		return []*forum.Entry{}, err
 	}
+	defer rows.Close()
 
 	entriesList := make([]*forum.Entry, count)
 	i := 0
@@ -107,11 +107,11 @@ func SaveForumReply(db *sql.DB, reply *forum.Reply) error {
 
 func GetForumReplies(db *sql.DB, forumEntryId int) ([]*forum.Reply, error) {
 	rows, err := db.Query("SELECT id, forum_entry_id, content, created FROM forum_replies WHERE forum_entry_id = ? ORDER BY created ASC", forumEntryId)
-	defer rows.Close()
 
 	if err != nil {
 		return []*forum.Reply{}, err
 	}
+	defer rows.Close()
 
 	var replies []*forum.Reply
 	for rows.Next() {
