@@ -84,14 +84,14 @@ func connectDB() *sql.DB {
 	dataSourceName := getEnv("APP_DB", "./luk4s.db")
 	db, err := sql.Open("sqlite", dataSourceName)
 	if err != nil {
-		fmt.Errorf("cannot open database")
+		_ = fmt.Errorf("cannot open database")
 		log.Fatal(err)
 	}
 
 	loggerAdapter := zerologadapter.New(zerolog.New(os.Stdout))
 	db = sqldblogger.OpenDriver(dataSourceName, db.Driver(), loggerAdapter)
 	if err = db.Ping(); err != nil {
-		fmt.Errorf("cannot reach database")
+		_ = fmt.Errorf("cannot reach database")
 		log.Fatal(err)
 	}
 
