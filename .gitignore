@@ -7,3 +7,5 @@ build/
 .env
 luk4s.db
 *.out
+*.db-shm
+*.db-wal

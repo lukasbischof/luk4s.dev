@@ -95,6 +95,16 @@ func connectDB() *sql.DB {
 		log.Fatal(err)
 	}
 
+	// SQLite doesn't handle concurrent connections well; serialize all access
+	db.SetMaxOpenConns(1)
+
+	if _, err = db.Exec("PRAGMA journal_mode=WAL"); err != nil {
+		log.Fatal("failed to enable WAL mode:", err)
+	}
+	if _, err = db.Exec("PRAGMA busy_timeout=5000"); err != nil {
+		log.Fatal("failed to set busy timeout:", err)
+	}
+
 	return db
 }
 
