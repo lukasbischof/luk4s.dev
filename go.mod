@@ -11,7 +11,7 @@ require (
 	github.com/simukti/sqldb-logger v0.0.0-20230108155151-646c1a075551
 	github.com/simukti/sqldb-logger/logadapter/zerologadapter v0.0.0-20230108155151-646c1a075551
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/text v0.35.0
+	golang.org/x/text v0.36.0
 	gopkg.in/validator.v2 v2.0.1
 	modernc.org/sqlite v1.49.1
 )
