@@ -1,6 +1,8 @@
 module github.com/lukasbischof/luk4s.dev
 
-go 1.25.0
+go 1.27
+
+toolchain go1.27.1
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.15
