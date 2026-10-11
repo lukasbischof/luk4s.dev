@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.25.6-alpine AS build-binary
+FROM golang:1.27.1-alpine AS build-binary
 
 WORKDIR "/go/src/github.com/lukasbischof/luk4s.dev/"
 
@@ -20,7 +20,7 @@ COPY ["package.json", "bun.lockb", "./"]
 RUN bun install --frozen-lockfile --production
 RUN bun run build
 
-FROM alpine:3.18.0
+FROM alpine:3.24.1
 
 LABEL org.opencontainers.image.authors="Lukas Bischof <me@luk4s.dev>"
 LABEL org.opencontainers.image.url="https://github.com/lukasbischof/luk4s.dev"
